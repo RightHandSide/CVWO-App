@@ -1,8 +1,8 @@
-package users
+package dataaccess
 
 import (
-	"github.com/CVWO/sample-go-app/internal/database"
-	"github.com/CVWO/sample-go-app/internal/models"
+	"github.com/RightHandSide/CVWO-App/internal/database"
+	"github.com/RightHandSide/CVWO-App/internal/models"
 )
 
 func List(db *database.Database) ([]models.User, error) {

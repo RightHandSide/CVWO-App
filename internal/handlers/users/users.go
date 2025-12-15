@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/CVWO/sample-go-app/internal/api"
-	users "github.com/CVWO/sample-go-app/internal/dataaccess"
-	"github.com/CVWO/sample-go-app/internal/database"
+	"github.com/RightHandSide/CVWO-App/internal/api"
+	"github.com/RightHandSide/CVWO-App/internal/dataaccess"
+	"github.com/RightHandSide/CVWO-App/internal/database"
 	"github.com/pkg/errors"
 )
 
@@ -27,7 +27,7 @@ func HandleList(w http.ResponseWriter, r *http.Request) (*api.Response, error) {
 		return nil, errors.Wrap(err, fmt.Sprintf(ErrRetrieveDatabase, ListUsers))
 	}
 
-	users, err := users.List(db)
+	users, err := dataaccess.List(db)
 	if err != nil {
 		return nil, errors.Wrap(err, fmt.Sprintf(ErrRetrieveUsers, ListUsers))
 	}
