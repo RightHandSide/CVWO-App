@@ -1,33 +1,47 @@
 package dataaccess
 
 import (
+	"encoding/json"
+	"net/http"
+
 	"github.com/RightHandSide/CVWO-App/internal/database"
 	"github.com/RightHandSide/CVWO-App/internal/models"
 )
 
-func List_User(db *database.Database) ([]models.User, error) {
+// List Users in Database
+func List(db *database.Database) ([]models.User, error) {
 	rows, err := db.SQL.Query("SELECT id, name FROM users")
-
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 
 	var result []models.User
-
 	for rows.Next() {
-		var u models.User
-		if err := rows.Scan(&u.ID, &u.Name); err != nil {
+		var user models.User
+		if err := rows.Scan(&user.ID, &user.Name); err != nil {
 			return nil, err
 		}
-		result = append(result, u)
+		result = append(result, user)
 	}
 
 	if err := rows.Err(); err != nil {
 		return nil, err
 	}
-
 	return result, nil
 }
 
-// Functions to Access db
+// Register User in Database
+func Register(db *database.Database, r *http.Request) (string, error) {
+	var req models.RegisterRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		return "", err
+	}
+
+	var name string = req.Name
+	_, err := db.SQL.Exec("INSERT INTO users (name) VALUES (?)", name)
+	if err != nil {
+		return "", err
+	}
+	return name, nil
+}

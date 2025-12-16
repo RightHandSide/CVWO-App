@@ -1,8 +1,6 @@
 package api
 
-import (
-	"encoding/json"
-)
+import "encoding/json"
 
 type Payload struct {
 	Meta json.RawMessage `json:"meta,omitempty"`

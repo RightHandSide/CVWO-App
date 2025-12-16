@@ -1,0 +1,36 @@
+package users
+
+import (
+	"encoding/json"
+	"fmt"
+	"net/http"
+
+	"github.com/RightHandSide/CVWO-App/internal/api"
+	"github.com/RightHandSide/CVWO-App/internal/dataaccess"
+	"github.com/RightHandSide/CVWO-App/internal/database"
+	"github.com/pkg/errors"
+)
+
+func HandleRegister(w http.ResponseWriter, r *http.Request) (*api.Response, error) {
+	db, err := database.GetDB()
+	if err != nil {
+		return nil, errors.Wrap(err, fmt.Sprintf(ErrRetrieveDatabase, RegisterUser))
+	}
+
+	name, err := dataaccess.Register(db, r)
+	if err != nil {
+		return nil, errors.Wrap(err, fmt.Sprintf(ErrRegisterUser, RegisterUser))
+	}
+
+	data, err := json.Marshal(name)
+	if err != nil {
+		return nil, errors.Wrap(err, fmt.Sprintf(ErrEncodeView, RegisterUser))
+	}
+
+	return &api.Response{
+		Payload: api.Payload{
+			Data: data,
+		},
+		Messages: []string{SuccessfulRegisterUserMessage},
+	}, nil
+}

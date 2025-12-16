@@ -2,7 +2,6 @@ package database
 
 import (
 	"database/sql"
-	"log"
 	"sync"
 
 	_ "modernc.org/sqlite"
@@ -22,15 +21,12 @@ func GetDB() (*Database, error) {
 
 	once.Do(func() {
 		var sqlDB *sql.DB
-		sqlDB, err = sql.Open("sqlite", "app.db")
+		sqlDB, err := sql.Open("sqlite", "app.db")
 		if err != nil {
-			log.Print(err)
 			return
 		}
 
-		err = sqlDB.Ping()
-		if err != nil {
-			log.Print(err)
+		if err := sqlDB.Ping(); err != nil {
 			return
 		}
 
