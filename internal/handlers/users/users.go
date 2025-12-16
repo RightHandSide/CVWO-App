@@ -27,7 +27,7 @@ func HandleList(w http.ResponseWriter, r *http.Request) (*api.Response, error) {
 		return nil, errors.Wrap(err, fmt.Sprintf(ErrRetrieveDatabase, ListUsers))
 	}
 
-	users, err := dataaccess.List(db)
+	users, err := dataaccess.List_User(db)
 	if err != nil {
 		return nil, errors.Wrap(err, fmt.Sprintf(ErrRetrieveUsers, ListUsers))
 	}
@@ -44,3 +44,5 @@ func HandleList(w http.ResponseWriter, r *http.Request) (*api.Response, error) {
 		Messages: []string{SuccessfulListUsersMessage},
 	}, nil
 }
+
+// One of the Handler Function

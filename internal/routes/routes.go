@@ -18,3 +18,5 @@ func GetRoutes() func(r chi.Router) {
 		})
 	}
 }
+
+// Different Routes
