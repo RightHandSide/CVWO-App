@@ -1,4 +1,4 @@
-import pic from "./assets/NGNL.jpg"
+import pic from "../assets/NGNL.jpg"
 
 function Card() {
     return (
