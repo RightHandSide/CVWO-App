@@ -1,9 +1,9 @@
 package users
 
 import (
-	"encoding/json"
 	"fmt"
 	"net/http"
+	"strings"
 
 	"github.com/RightHandSide/CVWO-App/internal/api"
 	"github.com/RightHandSide/CVWO-App/internal/dataaccess"
@@ -12,6 +12,9 @@ import (
 )
 
 func HandleRegister(w http.ResponseWriter, r *http.Request) (*api.Response, error) {
+	msg := SuccessfulRegisterUserMessage
+	code := 0
+
 	db, err := database.GetDB()
 	if err != nil {
 		return nil, errors.Wrap(err, fmt.Sprintf(ErrRetrieveDatabase, RegisterUser))
@@ -19,18 +22,17 @@ func HandleRegister(w http.ResponseWriter, r *http.Request) (*api.Response, erro
 
 	name, err := dataaccess.Register(db, r)
 	if err != nil {
-		return nil, errors.Wrap(err, fmt.Sprintf(ErrRegisterUser, RegisterUser))
+		if strings.Contains(err.Error(), "UNIQUE constraint failed") {
+			msg = NameRepeated
+			code = 1
+		} else {
+			return nil, errors.Wrap(err, fmt.Sprintf(ErrRegisterUser, RegisterUser))
+		}
 	}
-
-	data, err := json.Marshal(name)
-	if err != nil {
-		return nil, errors.Wrap(err, fmt.Sprintf(ErrEncodeView, RegisterUser))
-	}
+	_ = name
 
 	return &api.Response{
-		Payload: api.Payload{
-			Data: data,
-		},
-		Messages: []string{SuccessfulRegisterUserMessage},
+		Messages:  []string{msg},
+		ErrorCode: code,
 	}, nil
 }

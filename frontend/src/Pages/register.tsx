@@ -27,6 +27,12 @@ function Register() {
                 return;
             }
 
+            const data = await res.json();
+            const code = data.errorCode;
+            if (code == 1) {
+                setError("Repeated Name. Please Input a Different Name");
+                return;
+            }
             navigate("/register/completed", {state: { name }});
         } catch (err) {
             setError("Network or Server Error");

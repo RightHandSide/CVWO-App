@@ -34,5 +34,3 @@ func HandleList(w http.ResponseWriter, r *http.Request) (*api.Response, error) {
 		Messages: []string{SuccessfulListUsersMessage},
 	}, nil
 }
-
-// One of the Handler Function
