@@ -6,9 +6,10 @@ function RegisterComplete() {
     const name = state?.name ?? "";
 
     return (
-        <>
-        {name && <h1>{name} Registered Successfully!</h1>}
-        </>
+        <div className="center-box">
+            {name && <h1>{name} Registered Successfully!</h1>}
+            <p>Please Login with your Username</p>
+        </div>
     )
 }
 

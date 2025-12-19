@@ -1,28 +1,25 @@
-/* Card */
-.card {
+/* Thread */
+.thread {
+  display: block;
+  width: 100%;
+  margin: 10px auto;
+  padding: 20px;
   border: 1px solid hsl(0, 0%, 80%);
   border-radius: 10px;
   box-shadow: 0px 0px 10px hsl(0, 0%, 0%, 0.1);
-  padding: 20px;
-  margin: 10px;
-  text-align: center;
-  max-width: 150px;
-  display: inline-block;
+  background-color: hsl(0, 10%, 95%);
+  text-align: left;
 }
-.card .card-image {
-  max-width: 60%;
-  height: auto;
-  margin-bottom: 10px;
-}
-.card .card-title {
+.thread .thread-title {
   font-family: Arial, sans-serif;
-  margin: 0px;
+  font-size: 1.1rem;
+  margin: 0 0 8px 0;
   color: hsl(0, 0%, 20%);
 }
-.card .card-text {
+.thread .thread-text {
   font-family: Arial, sans-serif;
-  font-size: small;
-  margin: 10px;
+  line-height: 1.4;
+  margin: 0;
   color: hsl(0, 0%, 30%);
 }
 
@@ -34,4 +31,12 @@
   border: none;
   border-radius: 5px;
   cursor: pointer;
+}
+
+/* Center */
+.center-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }

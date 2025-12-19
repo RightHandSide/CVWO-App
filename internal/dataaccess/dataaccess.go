@@ -53,7 +53,7 @@ func ListThread(db *database.Database) ([]models.Thread, error) {
 		return nil, err
 	}
 
-	rows, err := db.SQL.Query("SELECT id, title, desc FROM threads")
+	rows, err := db.SQL.Query("SELECT id, user_id, title, desc FROM threads")
 	if err != nil {
 		return nil, err
 	}
@@ -62,7 +62,7 @@ func ListThread(db *database.Database) ([]models.Thread, error) {
 	var result []models.Thread
 	for rows.Next() {
 		var thread models.Thread
-		if err := rows.Scan(&thread.ID, &thread.Title, &thread.Description); err != nil {
+		if err := rows.Scan(&thread.ID, &thread.User_ID, &thread.Title, &thread.Description); err != nil {
 			return nil, err
 		}
 		result = append(result, thread)

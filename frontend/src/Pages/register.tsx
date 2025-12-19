@@ -40,7 +40,7 @@ function Register() {
     }
 
     return (
-        <>
+        <div className="center-box">
             <h1>Register</h1>
             <form onSubmit={HandleSubmit}>
                 <label>
@@ -56,7 +56,7 @@ function Register() {
                 </button>
             </form>
             {error && <p>{error}</p>}
-        </>
+        </div>
     )
 }
 

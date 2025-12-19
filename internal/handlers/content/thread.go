@@ -38,3 +38,4 @@ func HandleThread(w http.ResponseWriter, r *http.Request) (*api.Response, error)
 // Print out all threads
 // Post would be /thread-id/
 // Singular Post would be /thread-id/post-id
+// Remember to do something about ErrorCode
