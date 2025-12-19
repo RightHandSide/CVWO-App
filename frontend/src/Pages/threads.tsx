@@ -1,5 +1,5 @@
-import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
+import Topic from "../Component/Topic.tsx";
 
 type Thread = {
     id: number;
@@ -36,19 +36,11 @@ function Threads() {
     
     if (error) return <>{error}</>;
     return (
-        <div>
+        <>
             {threads.map((thread) => (
-                <Link
-                    key={thread.id}
-                    to={`/threads/${thread.id}`}
-                    style={{ textDecoration: "none"}}>
-                    <div key={thread.id} className="thread" >
-                        <h2 className="thread-title">{thread.title}</h2>
-                        <p className="thread-text">{thread.desc}</p>
-                    </div>
-                </Link>
+                <Topic type="threads" id={thread.id} title={thread.title} text={thread.desc} />
             ))}
-        </div>
+        </>
     );
 }
 
