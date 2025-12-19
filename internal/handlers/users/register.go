@@ -12,21 +12,21 @@ import (
 )
 
 func HandleRegister(w http.ResponseWriter, r *http.Request) (*api.Response, error) {
-	msg := SuccessfulRegisterUserMessage
+	msg := SuccessfulRegisterUsersMessage
 	code := 0
 
 	db, err := database.GetDB()
 	if err != nil {
-		return nil, errors.Wrap(err, fmt.Sprintf(ErrRetrieveDatabase, RegisterUser))
+		return nil, errors.Wrap(err, fmt.Sprintf(ErrRetrieveDatabase, RegisterUsers))
 	}
 
-	name, err := dataaccess.Register(db, r)
+	name, err := dataaccess.RegisterUser(db, r)
 	if err != nil {
 		if strings.Contains(err.Error(), "UNIQUE constraint failed") {
 			msg = NameRepeated
 			code = 1
 		} else {
-			return nil, errors.Wrap(err, fmt.Sprintf(ErrRegisterUser, RegisterUser))
+			return nil, errors.Wrap(err, fmt.Sprintf(ErrRegisterUsers, RegisterUsers))
 		}
 	}
 	_ = name

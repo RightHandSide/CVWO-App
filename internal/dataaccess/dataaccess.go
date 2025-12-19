@@ -9,7 +9,7 @@ import (
 )
 
 // List Users in Database
-func List(db *database.Database) ([]models.User, error) {
+func ListUser(db *database.Database) ([]models.User, error) {
 	rows, err := db.SQL.Query("SELECT id, name FROM users")
 	if err != nil {
 		return nil, err
@@ -32,7 +32,7 @@ func List(db *database.Database) ([]models.User, error) {
 }
 
 // Register User in Database
-func Register(db *database.Database, r *http.Request) (string, error) {
+func RegisterUser(db *database.Database, r *http.Request) (string, error) {
 	var req models.RegisterRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		return "", err
@@ -44,4 +44,32 @@ func Register(db *database.Database, r *http.Request) (string, error) {
 		return "", err
 	}
 	return name, nil
+}
+
+// List Threads in Database
+func ListThread(db *database.Database) ([]models.Thread, error) {
+	// Description cannot be NULL
+	if _, err := db.SQL.Exec(`UPDATE threads SET desc = '' WHERE desc IS NULL`); err != nil {
+		return nil, err
+	}
+
+	rows, err := db.SQL.Query("SELECT id, title, desc FROM threads")
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var result []models.Thread
+	for rows.Next() {
+		var thread models.Thread
+		if err := rows.Scan(&thread.ID, &thread.Title, &thread.Description); err != nil {
+			return nil, err
+		}
+		result = append(result, thread)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return result, nil
 }

@@ -30,6 +30,10 @@ func GetDB() (*Database, error) {
 			return
 		}
 
+		if _, err := sqlDB.Exec("PRAGMA foreign_keys = ON"); err != nil {
+			return
+		}
+
 		db = &Database{
 			SQL: sqlDB,
 		}
@@ -42,4 +46,8 @@ func GetDB() (*Database, error) {
 	return db, nil
 }
 
-// Connect to app.db
+// Database
+// users: id, name
+// threads: id, user_id, title, desc
+// posts: id, thread_id, user_id, title, body
+// comments: id, post_id, user_id, parent_comment_id, body

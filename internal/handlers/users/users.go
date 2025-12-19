@@ -11,13 +11,13 @@ import (
 	"github.com/pkg/errors"
 )
 
-func HandleList(w http.ResponseWriter, r *http.Request) (*api.Response, error) {
+func HandleUser(w http.ResponseWriter, r *http.Request) (*api.Response, error) {
 	db, err := database.GetDB()
 	if err != nil {
 		return nil, errors.Wrap(err, fmt.Sprintf(ErrRetrieveDatabase, ListUsers))
 	}
 
-	users, err := dataaccess.List(db)
+	users, err := dataaccess.ListUser(db)
 	if err != nil {
 		return nil, errors.Wrap(err, fmt.Sprintf(ErrRetrieveUsers, ListUsers))
 	}
