@@ -2,11 +2,6 @@ package models
 
 import "fmt"
 
-// Request
-type RegisterRequest struct {
-	Name string `json:"name"`
-}
-
 // Structure
 type User struct {
 	ID   int    `json:"id"`

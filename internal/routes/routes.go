@@ -26,6 +26,13 @@ func GetRoutes() func(r chi.Router) {
 			json.NewEncoder(w).Encode(response)
 		})
 
+		r.Post("/login", func(w http.ResponseWriter, req *http.Request) {
+			response, _ := users.HandleLogin(w, req)
+
+			w.Header().Set("Content-Type", "application/json")
+			json.NewEncoder(w).Encode(response)
+		})
+
 		// GET CONTENT
 		r.Get("/threads", func(w http.ResponseWriter, req *http.Request) {
 			response, _ := content.HandleThread(w, req)

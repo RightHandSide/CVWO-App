@@ -2,6 +2,11 @@ package api
 
 import "encoding/json"
 
+// Request
+type RegisterRequest struct {
+	Name string `json:"name"`
+}
+
 type Payload struct {
 	Meta json.RawMessage `json:"meta,omitempty"`
 	Data json.RawMessage `json:"data,omitempty"`

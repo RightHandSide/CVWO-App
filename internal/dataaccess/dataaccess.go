@@ -1,9 +1,11 @@
 package dataaccess
 
 import (
+	"database/sql"
 	"encoding/json"
 	"net/http"
 
+	"github.com/RightHandSide/CVWO-App/internal/api"
 	"github.com/RightHandSide/CVWO-App/internal/database"
 	"github.com/RightHandSide/CVWO-App/internal/models"
 )
@@ -33,7 +35,7 @@ func ListUser(db *database.Database) ([]models.User, error) {
 
 // Register User in Database
 func RegisterUser(db *database.Database, r *http.Request) (string, error) {
-	var req models.RegisterRequest
+	var req api.RegisterRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		return "", err
 	}
@@ -44,6 +46,27 @@ func RegisterUser(db *database.Database, r *http.Request) (string, error) {
 		return "", err
 	}
 	return name, nil
+}
+
+// Check User Existence in Database
+func LoginUser(db *database.Database, r *http.Request) (*models.User, error) {
+	var req api.RegisterRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		return nil, err
+	}
+
+	var name string = req.Name
+	row := db.SQL.QueryRow(`SELECT id, name FROM users WHERE name = ?`, name)
+
+	var user models.User
+	if err := row.Scan(&user.ID, &user.Name); err != nil {
+		if err == sql.ErrNoRows {
+			return nil, nil
+		}
+		return nil, err
+	}
+
+	return &user, nil
 }
 
 // List Threads in Database
