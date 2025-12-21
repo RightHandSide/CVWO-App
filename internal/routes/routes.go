@@ -33,28 +33,16 @@ func GetRoutes() func(r chi.Router) {
 			json.NewEncoder(w).Encode(response)
 		})
 
-		// GET CONTENT
+		// CONTENT
 		r.Get("/threads", func(w http.ResponseWriter, req *http.Request) {
 			response, _ := content.HandleThread(w, req)
 
 			w.Header().Set("Content-Type", "application/json")
 			json.NewEncoder(w).Encode(response)
 		})
-
-		// r.Get("/thread-{id}", func(w http.ResponseWriter, req *http.Request) {
-		// 	response, _ = content.ListPost(w, req)
-
-		// 	w.Header().Set("Content-Type", "application/json")
-		// 	json.NewEncoder(w).Encode(response)
-		// })
-
-		// r.Get("/post-{id}", func(w http.ResponseWriter, req *http.Request) {
-		// 	response, _ = content.ListComment(w, req)
-
-		// 	w.Header().Set("Content-Type", "application/json")
-		// 	json.NewEncoder(w).Encode(response)
-		// })
 	}
 }
 
 // Different Routes
+// Write Higher Order Function
+// If err != nil, Print

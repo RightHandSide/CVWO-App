@@ -3,7 +3,7 @@ package api
 import "encoding/json"
 
 // Request
-type RegisterRequest struct {
+type LoginRequest struct {
 	Name string `json:"name"`
 }
 

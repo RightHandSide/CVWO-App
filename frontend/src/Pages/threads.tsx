@@ -17,6 +17,7 @@ function Threads() {
             try {
                 const res = await fetch("http://localhost:8000/threads", {
                     method: "GET",
+                    credentials: "include",
                 });
 
                 if (!res.ok) {
@@ -25,7 +26,7 @@ function Threads() {
                 }
 
                 const data = await res.json();
-                const lst = data.payload?.data ?? []
+                const lst = data.payload?.data ?? [];
                 setThreads(lst);
             } catch (err) {
                 setError("Network or Server Error")
@@ -45,5 +46,3 @@ function Threads() {
 }
 
 export default Threads;
-// Send Cookie to Backend
-// Login to Assign Cookie

@@ -20,7 +20,8 @@ function Form(props) {
             const res = await fetch(props.fetch, {
                 method: "POST",
                 headers: {"Content-Type" : "application/json"},
-                body: JSON.stringify({ name })
+                body: JSON.stringify({ name }),
+                credentials: "include",
             });
 
             if (!res.ok) {
@@ -30,7 +31,7 @@ function Form(props) {
 
             const data = await res.json();
             const code = data.errorCode;
-            if (code == 1) {
+            if (code != 0) {
                 setError(data.messages[0]);
                 return;
             }
