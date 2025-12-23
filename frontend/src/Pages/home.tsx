@@ -1,14 +1,31 @@
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { Box, Button, Stack, Typography } from "@mui/material";
 
 function Home() {
+    const naviagte = useNavigate();
+    
     return (
-        <div className="center-box">
-            <h1>Home</h1>
-            <div style={{display: "flex", gap: "8px"}}>
-                <Link to="/login"><button>Login</button></Link>
-                <Link to="/register"><button>Register</button></Link>
-            </div>
-        </div>
+        <Box
+            sx={{
+                minHeight: "100vh",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center"
+            }}>
+                <Box textAlign="center">
+                    <Typography variant="h3" gutterBottom>
+                        Home
+                    </Typography>
+                    <Stack direction="row" spacing={2} justifyContent="center">
+                        <Button variant="contained" onClick={() => naviagte("/login")}>
+                            Login
+                        </Button>
+                        <Button variant="contained" onClick={() => naviagte("/register")}>
+                            Register
+                        </Button>
+                    </Stack>
+                </Box>
+            </Box>
     );
 }
 

@@ -1,4 +1,4 @@
-import Form from "../Component/Form.tsx";
+import Form from "../Components/Form.tsx";
 
 function Login() {
     return (

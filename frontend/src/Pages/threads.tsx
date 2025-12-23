@@ -1,12 +1,6 @@
 import { useEffect, useState } from "react";
-import Topic from "../Component/Topic.tsx";
-
-type Thread = {
-    id: number;
-    user_id: number;
-    title: string;
-    desc: string;
-}
+import type { Thread } from "../Type/models.ts"
+import Topic from "../Components/TopicList.tsx";
 
 function Threads() {
     const [threads, setThreads] = useState<Thread[]>([]);
@@ -36,10 +30,17 @@ function Threads() {
     }, [])
     
     if (error) return <>{error}</>;
+
     return (
         <>
             {threads.map((thread) => (
-                <Topic type="threads" id={thread.id} title={thread.title} text={thread.desc} />
+                <Topic
+                    key={thread.id}
+                    type="threads"
+                    id={thread.id}
+                    title={thread.title}
+                    text={thread.desc}
+                />
             ))}
         </>
     );
