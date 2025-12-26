@@ -7,11 +7,6 @@ import (
 
 // List Threads in Database
 func ListThread(db *database.Database) ([]models.Thread, error) {
-	// Remember to change desc NOT NULL
-	if _, err := db.SQL.Exec(`UPDATE threads SET desc = '' WHERE desc IS NULL`); err != nil {
-		return nil, err
-	}
-
 	// List "threads" Table
 	rows, err := db.SQL.Query("SELECT id, user_id, title, desc FROM threads")
 	if err != nil {

@@ -1,15 +1,17 @@
 import { useEffect, useState } from "react";
-import type { Thread } from "../Type/models.ts"
+import { useParams } from "react-router-dom";
+import type { Post } from "../Type/models.ts"
 import Topic from "../Components/TopicList.tsx";
 
-function Threads() {
-    const [threads, setThreads] = useState<Thread[]>([]);
+function Posts() {
+    const {id} = useParams<{ id: string }>();
+    const [posts, setPosts] = useState<Post[]>([]);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         async function load() {
             try {
-                const res = await fetch("http://localhost:8000/threads", {
+                const res = await fetch(`http://localhost:8000/thread/${id}`, {
                     method: "GET",
                     credentials: "include",
                 });
@@ -21,7 +23,7 @@ function Threads() {
 
                 const data = await res.json();
                 const lst = data.payload?.data ?? [];
-                setThreads(lst);
+                setPosts(lst);
             } catch (err) {
                 setError("Network or Server Error")
             }
@@ -33,17 +35,17 @@ function Threads() {
 
     return (
         <>
-            {threads.map((thread) => (
+            {posts.map((post) => (
                 <Topic
-                    key={thread.id}
-                    type="thread"
-                    id={thread.id}
-                    title={thread.title}
-                    text={thread.desc}
+                    key={post.id}
+                    type="post"
+                    id={post.id}
+                    title={post.title}
+                    text={post.body}
                 />
             ))}
         </>
     );
 }
 
-export default Threads;
+export default Posts;

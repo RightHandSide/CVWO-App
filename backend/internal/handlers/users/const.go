@@ -18,5 +18,5 @@ const (
 	ErrRegisterUsers = "Failed to Register User in %s"
 	ErrLoginUser     = "Failed to Login User in %s"
 
-	ErrEncodeView = "Failed to Retrieve Users in %s"
+	ErrEncodeView = "Failed to Retrieve in %s"
 )

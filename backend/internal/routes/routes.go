@@ -2,8 +2,10 @@ package routes
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 
+	"github.com/RightHandSide/CVWO-App/internal/api"
 	"github.com/RightHandSide/CVWO-App/internal/handlers/content"
 	"github.com/RightHandSide/CVWO-App/internal/handlers/users"
 	"github.com/go-chi/chi/v5"
@@ -12,37 +14,28 @@ import (
 func GetRoutes() func(r chi.Router) {
 	return func(r chi.Router) {
 		// USER
-		r.Get("/users", func(w http.ResponseWriter, req *http.Request) {
-			response, _ := users.HandleUser(w, req)
-
-			w.Header().Set("Content-Type", "application/json")
-			json.NewEncoder(w).Encode(response)
-		})
-
-		r.Post("/register", func(w http.ResponseWriter, req *http.Request) {
-			response, _ := users.HandleRegister(w, req)
-
-			w.Header().Set("Content-Type", "application/json")
-			json.NewEncoder(w).Encode(response)
-		})
-
-		r.Post("/login", func(w http.ResponseWriter, req *http.Request) {
-			response, _ := users.HandleLogin(w, req)
-
-			w.Header().Set("Content-Type", "application/json")
-			json.NewEncoder(w).Encode(response)
-		})
+		r.Get("/users", helper(users.HandleUser))
+		r.Post("/register", helper(users.HandleRegister))
+		r.Post("/login", helper(users.HandleLogin))
 
 		// CONTENT
-		r.Get("/threads", func(w http.ResponseWriter, req *http.Request) {
-			response, _ := content.HandleThread(w, req)
+		r.Get("/threads", helper(content.HandleThread))
+		r.Get("/thread/{id}", helper(content.HandlePost))
+		r.Get("/post/{id}", helper(content.HandleComment))
+	}
+}
 
-			w.Header().Set("Content-Type", "application/json")
-			json.NewEncoder(w).Encode(response)
-		})
+type HandleFunc func(w http.ResponseWriter, req *http.Request) (*api.Response, error)
+
+func helper(h HandleFunc) http.HandlerFunc {
+	return func(w http.ResponseWriter, req *http.Request) {
+		response, err := h(w, req)
+		if err != nil {
+			fmt.Println(`ERROR: ?`, err)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(response)
 	}
 }
 
 // Different Routes
-// Write Higher Order Function
-// If err != nil, Print

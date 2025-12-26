@@ -1,15 +1,17 @@
 import { useEffect, useState } from "react";
-import type { Thread } from "../Type/models.ts"
-import Topic from "../Components/TopicList.tsx";
+import { useParams } from "react-router-dom";
+import type { Comment } from "../Type/models.ts"
+import Ending from "../Components/CommentList.tsx";
 
-function Threads() {
-    const [threads, setThreads] = useState<Thread[]>([]);
+function Comments() {
+    const {id} = useParams<{ id: string }>();
+    const [comments, setComments] = useState<Comment[]>([]);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         async function load() {
             try {
-                const res = await fetch("http://localhost:8000/threads", {
+                const res = await fetch(`http://localhost:8000/post/${id}`, {
                     method: "GET",
                     credentials: "include",
                 });
@@ -21,7 +23,7 @@ function Threads() {
 
                 const data = await res.json();
                 const lst = data.payload?.data ?? [];
-                setThreads(lst);
+                setComments(lst);
             } catch (err) {
                 setError("Network or Server Error")
             }
@@ -33,17 +35,16 @@ function Threads() {
 
     return (
         <>
-            {threads.map((thread) => (
-                <Topic
-                    key={thread.id}
-                    type="thread"
-                    id={thread.id}
-                    title={thread.title}
-                    text={thread.desc}
+            {comments.map((comment) => (
+                <Ending
+                    key={comment.id}
+                    type="comment"
+                    id={comment.id}
+                    text={comment.body}
                 />
             ))}
         </>
     );
 }
 
-export default Threads;
+export default Comments;
