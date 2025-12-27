@@ -57,21 +57,26 @@ func HandlePost(w http.ResponseWriter, r *http.Request) (*api.Response, error) {
 	}
 
 	// List Post
-	posts, err := contentdata.ListPostByID(db, intid)
+	thread, posts, err := contentdata.ListPostByID(db, intid)
 	if err != nil {
 		return nil, errors.Wrap(err, fmt.Sprintf(ErrRetrievePosts, ListPosts))
 	}
 
-	// Encode posts
-	data, err := json.Marshal(posts)
+	data := map[string]interface{}{
+		"head": thread,
+		"tail": posts,
+	}
+
+	// Encode
+	encoded_data, err := json.Marshal(data)
 	if err != nil {
 		return nil, errors.Wrap(err, fmt.Sprintf(ErrEncodeView, ListPosts))
 	}
 
-	// Return api.Response: {Payload: Post List}, {Message: Successful}
+	// Return api.Response: {Payload: [Thread, Post List]}, {Message: Successful}
 	return &api.Response{
 		Payload: api.Payload{
-			Data: data,
+			Data: encoded_data,
 		},
 		Messages: []string{SuccessfulListPostsMessage},
 	}, nil

@@ -57,21 +57,26 @@ func HandleComment(w http.ResponseWriter, r *http.Request) (*api.Response, error
 	}
 
 	// List Comment
-	comments, err := contentdata.ListCommentByID(db, intid)
+	post, comments, err := contentdata.ListCommentByID(db, intid)
 	if err != nil {
 		return nil, errors.Wrap(err, fmt.Sprintf(ErrRetrieveComments, ListComments))
 	}
 
-	// Encode posts
-	data, err := json.Marshal(comments)
+	data := map[string]interface{}{
+		"head": post,
+		"tail": comments,
+	}
+
+	// Encode
+	encoded_data, err := json.Marshal(data)
 	if err != nil {
 		return nil, errors.Wrap(err, fmt.Sprintf(ErrEncodeView, ListComments))
 	}
 
-	// Return api.Response: {Payload: Comment List}, {Message: Successful}
+	// Return api.Response: {Payload: [Post, Comment List]}, {Message: Successful}
 	return &api.Response{
 		Payload: api.Payload{
-			Data: data,
+			Data: encoded_data,
 		},
 		Messages: []string{SuccessfulListCommentsMessage},
 	}, nil

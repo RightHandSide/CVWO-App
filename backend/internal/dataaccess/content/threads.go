@@ -1,6 +1,10 @@
 package contentdata
 
 import (
+	"encoding/json"
+	"net/http"
+
+	"github.com/RightHandSide/CVWO-App/internal/api"
 	"github.com/RightHandSide/CVWO-App/internal/database"
 	"github.com/RightHandSide/CVWO-App/internal/models"
 )
@@ -29,4 +33,19 @@ func ListThread(db *database.Database) ([]models.Thread, error) {
 		return nil, err
 	}
 	return result, nil
+}
+
+func MakeThread(db *database.Database, user *models.User, r *http.Request) error {
+	// Decode Request Body as api.CreateRequest
+	var req api.CreateRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		return err
+	}
+
+	_, err := db.SQL.Exec("INSERT INTO threads (user_id, title, desc) VALUES (?, ?, ?)",
+		user.ID, req.Title, req.Body)
+	if err != nil {
+		return err
+	}
+	return nil
 }

@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import type { Post } from "../Type/models.ts"
+import type { Post, Thread } from "../Type/models.ts"
 import Topic from "../Components/TopicList.tsx";
+import { Card, CardContent, Typography } from "@mui/material";
 
 function Posts() {
     const {id} = useParams<{ id: string }>();
+    const [thread, setThread] = useState<Thread | null>(null);
     const [posts, setPosts] = useState<Post[]>([]);
     const [error, setError] = useState<string | null>(null);
 
@@ -22,8 +24,9 @@ function Posts() {
                 }
 
                 const data = await res.json();
-                const lst = data.payload?.data ?? [];
-                setPosts(lst);
+                const { head, tail } = data.payload?.data ?? { head: null, tail: [] };
+                setThread(head);
+                setPosts(tail);
             } catch (err) {
                 setError("Network or Server Error")
             }
@@ -34,17 +37,29 @@ function Posts() {
     if (error) return <>{error}</>;
 
     return (
-        <>
-            {posts.map((post) => (
-                <Topic
-                    key={post.id}
-                    type="post"
-                    id={post.id}
-                    title={post.title}
-                    text={post.body}
-                />
-            ))}
-        </>
+        <Card>
+            <CardContent>
+                {thread && (
+                    <>
+                        <Typography variant="h4">
+                            {thread.title}
+                        </Typography>
+                        <Typography variant="h6">
+                            {thread.desc}
+                        </Typography>
+                    </>
+                )}
+                {posts.map((post) => (
+                    <Topic
+                        key={post.id}
+                        type="post"
+                        id={post.id}
+                        title={post.title}
+                        text={post.body}
+                    />
+                ))}
+            </CardContent>
+        </Card>
     );
 }
 

@@ -2,9 +2,13 @@ package api
 
 import "encoding/json"
 
-// Request
 type LoginRequest struct {
 	Name string `json:"name"`
+}
+
+type CreateRequest struct {
+	Title string `json:"title"`
+	Body  string `json:"body"`
 }
 
 type Payload struct {
