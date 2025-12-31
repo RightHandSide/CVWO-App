@@ -2,7 +2,10 @@ package contentdata
 
 import (
 	"database/sql"
+	"encoding/json"
+	"net/http"
 
+	"github.com/RightHandSide/CVWO-App/internal/api"
 	"github.com/RightHandSide/CVWO-App/internal/database"
 	"github.com/RightHandSide/CVWO-App/internal/models"
 )
@@ -44,4 +47,19 @@ func ListCommentByID(db *database.Database, postid int) (*models.Post, []models.
 		return nil, nil, err
 	}
 	return &post, result, nil
+}
+
+func MakeComment(db *database.Database, user *models.User, r *http.Request, postid int) error {
+	// Decode Request Body as api.CreateRequest
+	var req api.CreateRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		return err
+	}
+
+	_, err := db.SQL.Exec("INSERT INTO comments (post_id, user_id, body) VALUES (?, ?, ?)",
+		postid, user.ID, req.Body)
+	if err != nil {
+		return err
+	}
+	return nil
 }

@@ -2,7 +2,10 @@ package contentdata
 
 import (
 	"database/sql"
+	"encoding/json"
+	"net/http"
 
+	"github.com/RightHandSide/CVWO-App/internal/api"
 	"github.com/RightHandSide/CVWO-App/internal/database"
 	"github.com/RightHandSide/CVWO-App/internal/models"
 )
@@ -44,4 +47,19 @@ func ListPostByID(db *database.Database, threadid int) (*models.Thread, []models
 		return nil, nil, err
 	}
 	return &thread, result, nil
+}
+
+func MakePost(db *database.Database, user *models.User, r *http.Request, threadid int) error {
+	// Decode Request Body as api.CreateRequest
+	var req api.CreateRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		return err
+	}
+
+	_, err := db.SQL.Exec("INSERT INTO posts (thread_id, user_id, title, body) VALUES (?, ?, ?, ?)",
+		threadid, user.ID, req.Title, req.Body)
+	if err != nil {
+		return err
+	}
+	return nil
 }

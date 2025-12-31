@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { Alert, Box, Button, Paper, TextField, Typography } from "@mui/material";
 
-function CreateForm(props) {
-    const [title, setTitle] = useState("");
+function CreateComment() {
+    const {id} = useParams<{ id: string }>();
     const [body, setBody] = useState("");
     const [error, setError] = useState<string | null>(null);
     const navigate = useNavigate();
@@ -12,17 +12,17 @@ function CreateForm(props) {
         e.preventDefault();
         setError(null);
 
-        if (!title.trim() || !body.trim()) {
+        if (!body.trim()) {
             setError("Value Required");
             return;
         }
 
         try {
-            const res = await fetch(props.fetch, {
+            const res = await fetch(`http://localhost:8000/createcomments/${id}`, {
                 method: "POST",
                 headers: {"Content-Type" : "application/json"},
                 body: JSON.stringify({
-                    title: title,
+                    title: "",
                     body: body
                 }),
                 credentials: "include",
@@ -39,7 +39,7 @@ function CreateForm(props) {
                 setError(data.messages[0]);
                 return;
             }
-            navigate(props.nav)
+            navigate(`/post/${id}`)
         } catch (err) {
             setError("Network or Server Error");
         }
@@ -59,7 +59,7 @@ function CreateForm(props) {
                         width: 320
                     }}>
                         <Typography variant="h4" align="center" gutterBottom>
-                            {props.header}
+                            Create Comment
                         </Typography>
                         <Box
                             component="form"
@@ -70,12 +70,7 @@ function CreateForm(props) {
                                 gap: 2
                             }}>
                                 <TextField
-                                    label={props.title}
-                                    value={title}
-                                    onChange={e => setTitle(e.target.value)}
-                                    fullWidth/>
-                                <TextField
-                                    label={props.body}
+                                    label="Body"
                                     value={body}
                                     onChange={e => setBody(e.target.value)}
                                     fullWidth/>
@@ -90,4 +85,4 @@ function CreateForm(props) {
     );
 }
 
-export default CreateForm;
+export default CreateComment;

@@ -6,7 +6,9 @@ import Login from "./Pages/login.tsx";
 import Threads from "./Pages/threads.tsx";
 import Posts from "./Pages/posts.tsx";
 import Comments from "./Pages/comments.tsx";
-import CreateForm from "./Components/CreateForm.tsx";
+import CreateThread from "./Pages/createthread.tsx";
+import CreatePost from "./Pages/createpost.tsx";
+import CreateComment from "./Pages/createcomment.tsx";
 
 function App() {
   return (
@@ -17,9 +19,11 @@ function App() {
         <Route path="/register/completed" element={<RegisterComplete/>} />
         <Route path="/login" element={<Login/>} />
         <Route path="/threads" element={<Threads/>} />
-        <Route path="createthreads" element={<CreateForm/>} />
+        <Route path="/createthreads" element={<CreateThread/>} />
         <Route path="/thread/:id" element={<Posts/>} />
+        <Route path="/createposts/:id" element={<CreatePost/>} />
         <Route path="/post/:id" element={<Comments/>} />
+        <Route path="/createcomments/:id" element={<CreateComment/>} />
       </Routes>
     </BrowserRouter>
   );

@@ -23,10 +23,10 @@ func GetRoutes() func(r chi.Router) {
 		r.Post("/createthreads", helper(content.CreateThread))
 
 		r.Get("/thread/{id}", helper(content.HandlePost))
-		// r.Post()
+		r.Post("/createposts/{id}", helper(content.CreatePost))
 
 		r.Get("/post/{id}", helper(content.HandleComment))
-		// r.Post()
+		r.Post("/createcomments/{id}", helper(content.CreateComment))
 	}
 }
 
